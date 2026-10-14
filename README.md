@@ -31,6 +31,18 @@
 $ npm install
 ```
 
+## Database
+
+The application uses PostgreSQL and creates the `users` table when it starts.
+Copy `.env.example` to `.env` and set `DATABASE_URL` to your PostgreSQL
+connection string. The table has an identity `id`, a unique `username`, a
+`name`, and a `password` column. Store a password hash in `password`, never a
+plain-text password.
+
+```bash
+cp .env.example .env
+```
+
 ## Compile and run the project
 
 ```bash
