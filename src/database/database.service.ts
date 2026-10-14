@@ -6,6 +6,18 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Pool } from 'pg';
 
+export interface NewUser {
+  username: string;
+  name: string;
+  password: string;
+}
+
+export interface UserRecord {
+  id: number;
+  username: string;
+  name: string;
+}
+
 @Injectable()
 export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   private readonly pool: Pool;
@@ -28,6 +40,18 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
         password TEXT NOT NULL
       )
     `);
+  }
+
+  async createUser(user: NewUser): Promise<UserRecord | undefined> {
+    const result = await this.pool.query<UserRecord>(
+      `INSERT INTO users (username, name, password)
+       VALUES ($1, $2, $3)
+       ON CONFLICT (username) DO NOTHING
+       RETURNING id, username, name`,
+      [user.username, user.name, user.password],
+    );
+
+    return result.rows[0];
   }
 
   async onModuleDestroy(): Promise<void> {

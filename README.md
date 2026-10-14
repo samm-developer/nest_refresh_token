@@ -43,6 +43,13 @@ plain-text password.
 cp .env.example .env
 ```
 
+## Register users
+
+Send `POST /auth/register` with a JSON body containing `username`, `name`, and
+`password`. Passwords must contain at least 8 characters. The API stores a
+scrypt hash and returns the new user's `id`, `username`, and `name` without the
+password. A username that is already registered returns `409 Conflict`.
+
 ## Compile and run the project
 
 ```bash
